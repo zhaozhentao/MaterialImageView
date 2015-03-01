@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="shadow_end_color">#03000000</color>
+    <color name="shadow_start_color">#4f000000</color>
+    <!--37-->
+</resources>

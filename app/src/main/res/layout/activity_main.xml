@@ -1,0 +1,22 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.zzt.library.MaterialImageView
+        android:id="@+id/pic1"
+        android:layout_marginTop="60px"
+        android:src="@drawable/pic1"
+        android:layout_width="640px"
+        android:layout_height="960px" />
+
+    <com.zzt.library.MaterialImageView
+        app:shadow_size="15"
+        android:layout_marginTop="40px"
+        android:src="@drawable/pic2"
+        android:layout_width="500px"
+        android:layout_height="501px" />
+
+</LinearLayout>
