@@ -6,7 +6,7 @@
 
 # ScreenShot
 
-![image](https://github.com/zhaozhentao/BooheeScrollView/blob/master/screenshot/screen.gif)
+![image](https://github.com/zhaozhentao/MaterialImageView/blob/master/screenshot/screenshot.jpg)
 
 
 
