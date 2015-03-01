@@ -67,14 +67,14 @@ public class MaterialImageView extends ImageView {
                 defStyleAttr, 0);
 
         int shadowSize = a.getInt(R.styleable.MaterialImageView_shadow_size, 8);
-
+        radius = a.getInt(R.styleable.MaterialImageView_radius_size, 15);//radius size
+        
         a.recycle();
 
         init(context, context.getResources(), shadowSize);
     }
 
     public void init(Context context, Resources resources, int shadowSize){
-        radius = 15; //radius size
         //遮罩  用于画出圆角图片
         mMaskDrawable = new GradientDrawable();
         mMaskDrawable.setShape(GradientDrawable.RECTANGLE);
