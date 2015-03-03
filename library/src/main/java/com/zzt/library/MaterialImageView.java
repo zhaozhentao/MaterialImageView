@@ -52,6 +52,8 @@ public class MaterialImageView extends ImageView {
     private int mShadowStartColor;
     private int mShadowEndColor;
 
+    private boolean mUseWhiteBackground = false;
+
     public MaterialImageView(Context context) {
         this(context, null);
     }
@@ -62,19 +64,20 @@ public class MaterialImageView extends ImageView {
 
     public MaterialImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init(context, attrs, context.getResources(), defStyleAttr);
+    }
+
+    public void init(Context context, AttributeSet attrs, Resources resources, int defStyleAttr){
 
         final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MaterialImageView,
                 defStyleAttr, 0);
 
         int shadowSize = a.getInt(R.styleable.MaterialImageView_shadow_size, 8);
         radius = a.getInt(R.styleable.MaterialImageView_radius_size, 15);//radius size
-        
+        mUseWhiteBackground = a.getBoolean(R.styleable.MaterialImageView_use_white_bg, false);
+
         a.recycle();
 
-        init(context, context.getResources(), shadowSize);
-    }
-
-    public void init(Context context, Resources resources, int shadowSize){
         //遮罩  用于画出圆角图片
         mMaskDrawable = new GradientDrawable();
         mMaskDrawable.setShape(GradientDrawable.RECTANGLE);
@@ -88,7 +91,7 @@ public class MaterialImageView extends ImageView {
         mCacheBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
 
         mPaint = new Paint(Paint.DITHER_FLAG | Paint.HINTING_ON );
-        mPaint.setColor(0xffffffff);//卡片背景色
+        mPaint.setColor(0xffffffff);
 
         mShadowStartColor = resources.getColor(R.color.shadow_start_color);
         mShadowEndColor = resources.getColor(R.color.shadow_end_color);
@@ -156,7 +159,6 @@ public class MaterialImageView extends ImageView {
             mCornerShadowPath.reset();
         }
 
-        //画出一个扇形
         mCornerShadowPath.setFillType(Path.FillType.EVEN_ODD);
         mCornerShadowPath.moveTo(-mCornerRadius, 0.0F);
         mCornerShadowPath.rLineTo(-mShadowSize, 0.0F);
@@ -168,7 +170,7 @@ public class MaterialImageView extends ImageView {
         mCornerShadowPaint.setShader(
                 new RadialGradient(0.0F, 0.0F, mCornerRadius + mShadowSize,//阴影半径
                         new int[]{mShadowStartColor, mShadowStartColor, mShadowEndColor},
-                        new float[]{0.0F, startRatio, 1.0F}, //画各种颜色的范围
+                        new float[]{0.0F, startRatio, 1.0F},
                         Shader.TileMode.CLAMP));
 
         mEdgeShadowPaint.setShader(
@@ -186,10 +188,12 @@ public class MaterialImageView extends ImageView {
         canvas.translate(0.0F, mRawShadowSize / 2.0F);
         drawShadow(canvas);
         //白色背景
- /*       canvas.translate(0.0F, -mRawShadowSize / 2.0F);
-        canvas.drawRoundRect(
-                new RectF(mCardBounds.left, mCardBounds.top, mCardBounds.right, mCardBounds.bottom),
-                mCornerRadius, mCornerRadius, mPaint);*/
+        if(mUseWhiteBackground) {
+            canvas.translate(0.0F, -mRawShadowSize / 2.0F);
+            canvas.drawRoundRect(
+                    new RectF(mCardBounds.left, mCardBounds.top, mCardBounds.right, mCardBounds.bottom),
+                    mCornerRadius, mCornerRadius, mPaint);
+        }
         canvas.translate(0.0F, 0);
 
         if(mBounds == null){
@@ -207,7 +211,6 @@ public class MaterialImageView extends ImageView {
             if(width == mCachedWidth && height == mCachedHeight){
                 mCacheBitmap.eraseColor(0);
             }else{
-                //分配内存
                 mCacheBitmap.recycle();
                 mCacheBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
                 mCachedWidth = width;

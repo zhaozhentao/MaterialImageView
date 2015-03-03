@@ -13,6 +13,7 @@
         android:layout_height="960px" />
 
     <com.zzt.library.MaterialImageView
+        app:use_white_bg="false"
         app:shadow_size="15"
         app:radius_size="16"
         android:layout_marginTop="40px"
