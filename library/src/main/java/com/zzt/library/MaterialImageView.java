@@ -45,7 +45,7 @@ public class MaterialImageView extends ImageView {
     private float mRawShadowSize;
 
     private int radius;
-    private Rect mCardBounds = new Rect();
+    private Rect mBgBounds = new Rect();
     private Rect mBounds = new Rect();
     float mCornerRadius;
 
@@ -130,10 +130,10 @@ public class MaterialImageView extends ImageView {
         final boolean changed = super.setFrame(l, t, r, b);
         mBounds.set(0, 0, r - l, b - t);
         mBoundsF.set(0, 0, r - l, b - t);
-        buildComponents(0, 0, r - l, b - t);
+        buildShadow(0, 0, r - l, b - t);
 
-        mMaskDrawable.setBounds(mCardBounds.left, mCardBounds.top + (int)(mRawShadowSize / 2.0F),
-                mCardBounds.right, mCardBounds.bottom + (int)(mRawShadowSize / 2.0F));
+        mMaskDrawable.setBounds(mBgBounds.left, mBgBounds.top + (int)(mRawShadowSize / 2.0F),
+                mBgBounds.right, mBgBounds.bottom + (int)(mRawShadowSize / 2.0F));
 
         if (changed) {
             mCacheValid = false;
@@ -141,9 +141,9 @@ public class MaterialImageView extends ImageView {
         return changed;
     }
 
-    private void buildComponents(int left, int top, int right, int bottom){
+    private void buildShadow(int left, int top, int right, int bottom){
         float verticalOffset = mRawMaxShadowSize * 1.5F;
-        mCardBounds.set(left + (int)mRawMaxShadowSize, top +(int)verticalOffset,
+        mBgBounds.set(left + (int)mRawMaxShadowSize, top +(int)verticalOffset,
                 right - (int)mRawMaxShadowSize, bottom - (int)verticalOffset);
         buildShadowCorners();
     }
@@ -191,7 +191,7 @@ public class MaterialImageView extends ImageView {
         if(mUseWhiteBackground) {
             canvas.translate(0.0F, -mRawShadowSize / 2.0F);
             canvas.drawRoundRect(
-                    new RectF(mCardBounds.left, mCardBounds.top, mCardBounds.right, mCardBounds.bottom),
+                    new RectF(mBgBounds.left, mBgBounds.top, mBgBounds.right, mBgBounds.bottom),
                     mCornerRadius, mCornerRadius, mPaint);
         }
         canvas.translate(0.0F, 0);
@@ -234,43 +234,43 @@ public class MaterialImageView extends ImageView {
     private void drawShadow(Canvas canvas) {
         float edgeShadowTop = -mCornerRadius - mShadowSize;
         float inset = mCornerRadius + mInsetShadow + mRawShadowSize / 2.0F;
-        boolean drawHorizontalEdges = mCardBounds.width() - 2.0F * inset > 0.0F;
-        boolean drawVerticalEdges = mCardBounds.height() - 2.0F * inset > 0.0F;
+        boolean drawHorizontalEdges = mBgBounds.width() - 2.0F * inset > 0.0F;
+        boolean drawVerticalEdges = mBgBounds.height() - 2.0F * inset > 0.0F;
 
         int saved;
 
         saved = canvas.save();
-        canvas.translate(mCardBounds.left + inset, mCardBounds.top + inset);
+        canvas.translate(mBgBounds.left + inset, mBgBounds.top + inset);
         if (drawHorizontalEdges) {
-            canvas.drawRect(0.0F, edgeShadowTop, mCardBounds.width() - 2.0F * inset, -mCornerRadius, mEdgeShadowPaint);
+            canvas.drawRect(0.0F, edgeShadowTop, mBgBounds.width() - 2.0F * inset, -mCornerRadius, mEdgeShadowPaint);
         }
         canvas.drawPath(mCornerShadowPath, mCornerShadowPaint);//和下面不同  这句放在这里 才不会出现旋转后阴影缺角
         canvas.restoreToCount(saved);
 
         saved = canvas.save();
-        canvas.translate(mCardBounds.left + inset, mCardBounds.bottom - inset);
+        canvas.translate(mBgBounds.left + inset, mBgBounds.bottom - inset);
         canvas.rotate(270.0F);
         canvas.drawPath(mCornerShadowPath, mCornerShadowPaint);
         if (drawVerticalEdges) {
-            canvas.drawRect(0.0F, edgeShadowTop, mCardBounds.height() - 2.0F * inset, -mCornerRadius, mEdgeShadowPaint);
+            canvas.drawRect(0.0F, edgeShadowTop, mBgBounds.height() - 2.0F * inset, -mCornerRadius, mEdgeShadowPaint);
         }
         canvas.restoreToCount(saved);
 
         saved = canvas.save();
-        canvas.translate(mCardBounds.right - inset, mCardBounds.top + inset);
+        canvas.translate(mBgBounds.right - inset, mBgBounds.top + inset);
         canvas.rotate(90.0F);
         canvas.drawPath(mCornerShadowPath, mCornerShadowPaint);
         if (drawVerticalEdges) {
-            canvas.drawRect(0.0F, edgeShadowTop, mCardBounds.height() - 2.0F * inset, -mCornerRadius, mEdgeShadowPaint);
+            canvas.drawRect(0.0F, edgeShadowTop, mBgBounds.height() - 2.0F * inset, -mCornerRadius, mEdgeShadowPaint);
         }
         canvas.restoreToCount(saved);
 
         saved = canvas.save();
-        canvas.translate(mCardBounds.right - inset, mCardBounds.bottom - inset);
+        canvas.translate(mBgBounds.right - inset, mBgBounds.bottom - inset);
         canvas.rotate(180.0F);
         canvas.drawPath(mCornerShadowPath, mCornerShadowPaint);
         if (drawHorizontalEdges) {
-            canvas.drawRect(0.0F, edgeShadowTop, mCardBounds.width() - 2.0F * inset, -mCornerRadius + mShadowSize, mEdgeShadowPaint);
+            canvas.drawRect(0.0F, edgeShadowTop, mBgBounds.width() - 2.0F * inset, -mCornerRadius + mShadowSize, mEdgeShadowPaint);
         }
         canvas.restoreToCount(saved);
     }
